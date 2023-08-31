@@ -86,7 +86,25 @@ class AlgoliaQuery {
 
     return AlgoliaQuerySnapshot._(algolia, _index, body);
   }
+  ///
+  /// **Brows**
+  ///
+  /// This will execute the query and brows data from Algolia
+  /// Get all records from an index.
+  ///
+  Future<AlgoliaQuerySnapshot> browse() async {
+    var response = await algolia._apiCall(
+      ApiRequestType.get,
+      'indexes/$encodedIndex/browse',
+      data: _parameters,
+    );
+    Map<String, dynamic> body = json.decode(response.body);
+    if (!(response.statusCode >= 200 && response.statusCode < 300)) {
+      throw AlgoliaError._(body, response.statusCode);
+    }
 
+    return AlgoliaQuerySnapshot._(algolia, _index, body);
+  }
   ///
   /// **DeleteObjects**
   ///
